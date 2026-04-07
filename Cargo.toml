@@ -1,0 +1,8 @@
+[package]
+name = "iced-debug"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+iced-layout-inspector = { path = "../../lib/iced-layout-inspector", features = ["server"] }
+clap = { version = "4", features = ["derive"] }

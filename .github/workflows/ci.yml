@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_BUILD_TARGET: x86_64-unknown-linux-gnu
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: cli/iced-debug
+
+      - uses: actions/checkout@v4
+        with:
+          repository: Osso/iced-layout-inspector
+          path: lib/iced-layout-inspector
+          token: ${{ secrets.GH_PAT }}
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: cli/iced-debug
+
+      - name: Check formatting
+        run: cargo fmt --check
+        working-directory: cli/iced-debug
+
+      - name: Clippy
+        run: cargo clippy
+        working-directory: cli/iced-debug
+
+      - name: Build
+        run: cargo build --release
+        working-directory: cli/iced-debug
+
+      - name: Run tests
+        run: cargo test
+        working-directory: cli/iced-debug

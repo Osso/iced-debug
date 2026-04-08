@@ -95,36 +95,64 @@ fn list_servers() {
     }
 }
 
+fn cmd_dump(socket: &PathBuf) {
+    match client::dump(socket) {
+        Ok(layout) => println!("{}", layout),
+        Err(e) => eprintln!("Error: {}", e),
+    }
+}
+
+fn cmd_input(socket: &PathBuf, field: &str, value: &str) {
+    match client::input(socket, field, value) {
+        Ok(()) => println!("OK"),
+        Err(e) => eprintln!("Error: {}", e),
+    }
+}
+
+fn cmd_click(socket: &PathBuf, label: &str) {
+    match client::click(socket, label) {
+        Ok(()) => println!("OK"),
+        Err(e) => eprintln!("Error: {}", e),
+    }
+}
+
+fn cmd_submit(socket: &PathBuf) {
+    match client::submit(socket) {
+        Ok(()) => println!("OK"),
+        Err(e) => eprintln!("Error: {}", e),
+    }
+}
+
+fn cmd_key(socket: &PathBuf, key: &str) {
+    match client::key(socket, key) {
+        Ok(()) => println!("Sent key '{}'", key),
+        Err(e) => eprintln!("Error: {}", e),
+    }
+}
+
+fn cmd_ping(socket: &PathBuf) {
+    match client::ping(socket) {
+        Ok(()) => println!("Pong"),
+        Err(e) => eprintln!("Error: {}", e),
+    }
+}
+
+fn cmd_screenshot(socket: &PathBuf, output: &PathBuf) {
+    match client::screenshot_to_file(socket, output) {
+        Ok(()) => println!("Screenshot saved to {}", output.display()),
+        Err(e) => eprintln!("Error: {}", e),
+    }
+}
+
 fn run_command(cmd: Commands, socket: &PathBuf) {
     match cmd {
-        Commands::Dump => match client::dump(socket) {
-            Ok(layout) => println!("{}", layout),
-            Err(e) => eprintln!("Error: {}", e),
-        },
-        Commands::Input { field, value } => match client::input(socket, &field, &value) {
-            Ok(()) => println!("OK"),
-            Err(e) => eprintln!("Error: {}", e),
-        },
-        Commands::Click { label } => match client::click(socket, &label) {
-            Ok(()) => println!("OK"),
-            Err(e) => eprintln!("Error: {}", e),
-        },
-        Commands::Submit => match client::submit(socket) {
-            Ok(()) => println!("OK"),
-            Err(e) => eprintln!("Error: {}", e),
-        },
-        Commands::Key { key } => match client::key(socket, &key) {
-            Ok(()) => println!("Sent key '{}'", key),
-            Err(e) => eprintln!("Error: {}", e),
-        },
-        Commands::Ping => match client::ping(socket) {
-            Ok(()) => println!("Pong"),
-            Err(e) => eprintln!("Error: {}", e),
-        },
-        Commands::Screenshot { output } => match client::screenshot_to_file(socket, &output) {
-            Ok(()) => println!("Screenshot saved to {}", output.display()),
-            Err(e) => eprintln!("Error: {}", e),
-        },
+        Commands::Dump => cmd_dump(socket),
+        Commands::Input { field, value } => cmd_input(socket, &field, &value),
+        Commands::Click { label } => cmd_click(socket, &label),
+        Commands::Submit => cmd_submit(socket),
+        Commands::Key { key } => cmd_key(socket, &key),
+        Commands::Ping => cmd_ping(socket),
+        Commands::Screenshot { output } => cmd_screenshot(socket, &output),
         Commands::List => unreachable!(),
     }
 }

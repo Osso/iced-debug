@@ -300,6 +300,7 @@ checksum = "384b8ab6d37215f3c5301a95a4accb5d64aa607f1fcb26a11b5303878451b4fe"
 [[package]]
 name = "peercred-ipc"
 version = "0.1.0"
+source = "git+https://github.com/Osso/peercred-ipc.git?tag=v0.2.0#dc0093cf4103b6bd887fc5941132fd9d4293e22e"
 dependencies = [
  "libc",
  "rmp-serde",

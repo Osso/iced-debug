@@ -22,7 +22,6 @@ jobs:
         with:
           repository: Osso/iced-layout-inspector
           path: lib/iced-layout-inspector
-          token: ${{ secrets.GH_PAT }}
 
       - uses: dtolnay/rust-toolchain@stable
         with:
